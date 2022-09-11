@@ -7,6 +7,16 @@ export async function registerCredential(Credential: ICredential, userId: number
 }
 
 export async function getCredentialsByUser(userId: number) {    
-    const user = (await credentialsRepository.getCredentialsByUser(userId))
-    return (user)
+    const credentials = (await credentialsRepository.getCredentialsByUser(userId))
+    return (credentials)
+}
+
+export async function getOneCredential(userId: number, id: number) {
+    const credential = await credentialsRepository.getOneCredential(userId, id)
+    return (credential)
+}
+
+export async function deleteCredential(userId: number, id: number) {
+    const result = await credentialsRepository.deleteCredential(userId, id)
+    return (result)
 }
