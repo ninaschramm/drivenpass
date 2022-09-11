@@ -1,4 +1,3 @@
-import { object } from "joi";
 import client from "../config/db";
 
 export async function insert(username: string, password: string, url:string, title: string, userId: number) {
