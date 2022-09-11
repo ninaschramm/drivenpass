@@ -38,6 +38,7 @@ export async function getCredentialsByUser(req: Request, res: Response) {
     }
     catch (error) {
         console.log(error)
+        res.sendStatus(500)
     }
 }
 

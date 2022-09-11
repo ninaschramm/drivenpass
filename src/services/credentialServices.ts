@@ -3,7 +3,8 @@ import { ICredential } from '../types/credentialTypes'
 
 export async function registerCredential(Credential: ICredential, userId: number) {
     const { username, password, url, title } = Credential
-    await credentialsRepository.insert(username, password, url, title, userId)
+    const result = await credentialsRepository.insert(username, password, url, title, userId)
+    return (result)
 }
 
 export async function getCredentialsByUser(userId: number) {    
