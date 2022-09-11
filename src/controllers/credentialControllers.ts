@@ -5,9 +5,10 @@ import { Request, Response } from 'express';
 import { errorHandlerMiddleware } from '../middlewares/errorMiddleware';
 
 const SECRET = process.env.TOKEN_SECRET;
+const crypter = new Cryptr(SECRET)
 
 export async function postCredential(req: Request, res: Response) {
-    const crypter = new Cryptr(SECRET)
+    
     const userId = res.locals.id
     let Credential: ICredential = req.body;
     const encryptedPassword = crypter.encrypt(Credential.password)
@@ -29,4 +30,11 @@ export async function postCredential(req: Request, res: Response) {
         
     }
    
+}
+
+export async function getCredentialsByUser(req: Request, res: Response) {
+    const userId = res.locals.id;
+    let credentials = await credentialServices.getCredentialsByUser(userId);
+    credentials.map(credential => credential.password = crypter.decrypt(credential.password))
+    res.status(200).send(credentials)
 }
