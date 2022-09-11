@@ -1,8 +1,13 @@
 import * as authServices from "../services/authServices";
 import { Request, Response } from "express";
 import bcrypt from 'bcrypt';
+import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+import { IUser } from '../types/userTypes';
 
-export async function createUser(req:Request, res: Response){
+dotenv.config()
+
+export async function createUser(req: Request, res: Response){
     const { email, password } = req.body;
     const Rounds = Number(process.env.Rounds);
     const crypted = bcrypt.hashSync(password, Rounds);
@@ -14,5 +19,29 @@ export async function createUser(req:Request, res: Response){
     catch(e){
         console.log(e);
         return res.sendStatus(500);
+    }
+}
+
+export async function signIn(req: Request, res: Response) {
+    const { email, password } = req.body;
+    
+    try {
+       const user = await authServices.signIn(email);
+       console.log(user)
+      if (!bcrypt.compareSync(password, user.password) || user === undefined || user === null) {
+       res.status(401).send("E-mail ou senha estão errados")
+      }
+      else {
+        const expire = {expiresIn: 60*60*3};
+        const data = {
+            id: user.id,
+            email: user.email
+        }
+        const token = jwt.sign(data, process.env.TOKEN_SECRET, expire);
+        return res.status(200).send({token, userId: user.id});
+      }
+    }
+    catch {
+        console.error();        
     }
 }

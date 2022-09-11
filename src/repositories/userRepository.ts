@@ -10,7 +10,8 @@ export async function insert(email: string, password: string) {
 }
 
 export async function checkEmail(email: string) {
-    await client.users.findUnique({
+    const user = await client.users.findUnique({
         where: { email }
     })
+    return user
 }
