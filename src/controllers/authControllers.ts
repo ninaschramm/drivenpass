@@ -3,14 +3,13 @@ import { Request, Response } from "express";
 import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
-import { IUser } from '../types/userTypes';
 
 dotenv.config()
 
 export async function createUser(req: Request, res: Response){
     const { email, password } = req.body;
-    const Rounds = Number(process.env.Rounds);
-    const crypted = bcrypt.hashSync(password, Rounds);
+    const ROUNDS = Number(process.env.ROUNDS);
+    const crypted = bcrypt.hashSync(password, ROUNDS);
 
     try {    
         await authServices.createUser(email, crypted);
