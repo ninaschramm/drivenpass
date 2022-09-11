@@ -16,6 +16,7 @@ model users {
 	password String
   credentials credentials[]
   notes notes[]
+  cards cards[]
 }
 
 model credentials {
@@ -38,4 +39,26 @@ model notes {
 	text String @db.VarChar(1000)
 
   @@unique(fields: [title, userId], name: "title_userId")
+}
+
+model cards {
+	id Int @id @default(autoincrement())
+  userId Int
+  user users @relation(fields: [userId], references: [id])
+	title String
+  cardNumber String
+	printedName String
+	cvc Int
+  expirationDate DateTime
+  password String
+  virtual Boolean @default(false)
+  cardType cardType @default(Both) 
+
+  @@unique(fields: [title, userId], name: "title_userId")
+}
+
+enum cardType {
+  Debit
+  Credit
+  Both
 }
